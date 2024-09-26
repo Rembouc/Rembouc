@@ -1,0 +1,151 @@
+/* Общие стили для всех страниц */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Lora', serif;
+  background-color: #f0f4f7;
+}
+
+/* --- Стили для главной страницы (index.html) --- */
+body.index-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Центрирование по всей высоте */
+  background-color: #f0f4f7;
+}
+
+.card {
+  width: 30%;
+  min-width: 300px;
+  padding: 50px 30px;
+  background-color: #ffffff;
+  text-align: center;
+  border-radius: 1.25rem;
+  color: #d95959;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.index-page h1 {
+  font-size: 46px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.web_form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Убираем фиксированную высоту для input */
+input {
+  width: 80%;
+  font-size: 20px; /* Увеличиваем размер текста */
+  padding: 5px 10px; /* Уменьшаем отступы, чтобы уменьшить высоту поля */
+  height: 35px; /* Устанавливаем фиксированную высоту */
+  margin-bottom: 20px;
+  border-radius: 1.25rem;
+  border: 2px solid rgb(202, 174, 174);
+  transition: all 0.3s ease;
+}
+
+input:hover {
+  border: 2px solid #e85858;
+  transition: all 0.375s;
+}
+
+button {
+  width: 85%; /* Ширина кнопки остается прежней */
+  height: 50px; /* Фиксированная высота кнопки */
+  padding: 0 16px; /* Отступы по бокам */
+  margin-top: 5px;
+  border-radius: 1.25rem;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: #d95959;
+  color: #f9f9f9;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #d32f2f;
+  transition: all 0.375s;
+}
+
+/* --- Стили для страницы результатов (result.html) --- */
+body.result-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Центрирование по всей высоте */
+  margin: 0;
+  background-image: url('/static/bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.container {
+  width: 80%;
+  max-width: 800px;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  text-align: center;
+  margin: auto; /* Центрирование по вертикали */
+}
+
+/* Изображение на странице результатов */
+.container img {
+  max-width: 100%;
+  height: auto;
+  margin: 30px 0;
+  border-radius: 15px; /* Закругление углов */
+}
+
+/* Стили для ссылок и кнопок на странице результатов */
+a {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #e06060;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+a:hover {
+  background-color: #da3737;
+}
+
+/* Обновленный стиль для input */
+input {
+  width: 80%;
+  font-size: 15px; /* Увеличиваем размер текста */
+  padding: 5px 10px; /* Уменьшаем отступы */
+  margin-bottom: 20px;
+  border-radius: 1.25rem;
+  border: 2px solid rgb(202, 174, 174);
+  transition: all 0.3s ease;
+}
+
+input:hover, input:focus {
+  border: 2px solid #e85858;
+  outline: none;
+}
+
+input::placeholder {
+  font-size: 16px; /* Размер текста для placeholder */
+  color: #bbb;
+}
+
+h1 {
+  color:#d95959;
+}

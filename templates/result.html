@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>WikAnimals.com</title>
+        <!-- Правильный путь для подключения статического файла -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css', v=1) }}">
+    </head>
+<body class="result-page">
+    <div class="container">
+        <h1>Результаты поиска для {{ animal }}</h1>
+        {% if image_url %}
+            <img src="{{ image_url }}" alt="{{ animal }}">
+        {% else %}
+            <p>Изображение недоступно.</p>
+        {% endif %}
+        <p>{{ info }}</p>
+        <p><a href="{{ article_url }}">Читать далее на Википедии</a></p>
+        <a href="/">Назад к поиску</a>
+    </div>
+</body>
+</html>
