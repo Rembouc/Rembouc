@@ -5,14 +5,13 @@ import re
 
 app = Flask(__name__)
 
-# Функции для очистки и форматирования
+
 def clean_text(text):
     return re.sub(r'\(.*?\)|\[.*?\)', '', text).strip()
 
 def format_animal_name(animal_name):
     return re.sub(r'\s+', '_', animal_name.strip())
 
-# Функция для получения информации о животном
 def get_animal_info(animal_name):
     formatted_name = format_animal_name(animal_name)
     url = f"https://ru.wikipedia.org/wiki/{formatted_name}"
@@ -27,12 +26,10 @@ def get_animal_info(animal_name):
     info_texts = [clean_text(paragraph.text) for paragraph in paragraphs[:3]]
     return {"info": info_texts, "image_url": image_url, "article_url": article_url}
 
-# Главная страница с поиском
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# Страница с результатами поиска
 @app.route('/result', methods=['POST'])
 def result():
     animal_name = request.form.get('animal')

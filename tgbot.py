@@ -9,12 +9,12 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from telebot import types
 
-# Загрузка переменных окружения
+
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
 bot = telebot.TeleBot(TOKEN)
 
-# Функции для обработки текста
+
 def clean_text(text):
     text = re.sub(r'\(.*?\)', '', text)
     text = re.sub(r'\[.*?]', '', text)
@@ -23,7 +23,7 @@ def clean_text(text):
 def format_animal_name(animal_name):
     return re.sub(r'\s+', '_', animal_name.strip())
 
-# Функции для получения информации о животных
+
 def get_animal_paragraph_and_image(animal_name):
     formatted_name = format_animal_name(animal_name)
     animal_url = f"https://ru.wikipedia.org/wiki/{formatted_name}"
@@ -56,7 +56,7 @@ def get_animal_paragraph_and_image(animal_name):
             "article_url": None
         }
 
-# Функции для получения пород собак и кошек
+
 def get_dog_breeds():
     dog_breeds_url = "https://www.purinaone.ru/dog/articles/breeds/samye-populyarnye-porody-sobak-s-fotografiyami-i-nazvaniyami"
     popular_dog_breeds = []
@@ -90,7 +90,7 @@ def get_cat_breeds():
     popular_cat_breeds.sort()
     return [f"{idx + 1}. {breed}" for idx, breed in enumerate(popular_cat_breeds)]
 
-# Функции для работы с событиями и окружающей средой
+
 def get_environmental_text():
     environmental_url = "https://greenmystery.ru/blog/ecologia_problems/"
     environmental_response = requests.get(environmental_url)
@@ -137,12 +137,12 @@ def get_event_of_the_day():
     }
     return events.get(day, "Нет события на этот день.")
 
-# Инициализация пользователя
+
 user_start_greeted = []
 user_states = {}
 user_sent_messages = defaultdict(list)
 
-# Обработчики команд и кнопок
+
 @bot.message_handler(commands=['start'])
 def button(message):
     if message.from_user.id not in user_start_greeted:
@@ -155,7 +155,7 @@ def button(message):
 @bot.callback_query_handler(func=lambda call: True)
 def callback(call):
     chat_id = call.message.chat.id
-    # Удаляем старые сообщения
+
     for msg_id in user_sent_messages[chat_id]:
         try:
             bot.delete_message(chat_id, msg_id)
@@ -163,7 +163,6 @@ def callback(call):
             pass
     user_sent_messages[chat_id].clear()
 
-    # Основной разметка
     back_markup = types.InlineKeyboardMarkup().add(types.InlineKeyboardButton('🔙Назад🔙', callback_data='back'))
 
     if call.data == 'question_1':
@@ -189,11 +188,10 @@ def callback(call):
         msg = bot.send_message(call.message.chat.id, f"Информация о спасении животных:\n{environmental_text}", reply_markup=back_markup)
         user_sent_messages[chat_id].append(msg.message_id)
     elif call.data == 'back':
-        # Убираем состояние при возврате назад
+
         user_states.pop(chat_id, None)
         show_main_buttons(chat_id)
 
-# Пример изменения в функции search_animal
 def search_animal(message):
     animal_name = message.text
     animal_info = get_animal_paragraph_and_image(animal_name)
@@ -205,14 +203,13 @@ def search_animal(message):
         caption = paragraphs[0][:1024]
         sent_message = bot.send_photo(message.chat.id, animal_info['image_url'], caption=caption)
         user_sent_messages[message.chat.id].append(sent_message.message_id)
-        # Сохраняем идентификатор сообщения
+
         msg = bot.send_message(message.chat.id, "Вы можете нажать 'Назад', чтобы удалить это сообщение.")
         user_sent_messages[message.chat.id].append(msg.message_id)
         for paragraph in paragraphs[1:]:
             msg = bot.send_message(message.chat.id, paragraph)
             user_sent_messages[message.chat.id].append(msg.message_id)
 
-        # Отправка ссылки на статью
         if animal_info['article_url']:
             msg = bot.send_message(message.chat.id, f"Читать далее: {animal_info['article_url']}")
             user_sent_messages[message.chat.id].append(msg.message_id)
@@ -221,12 +218,10 @@ def search_animal(message):
             msg = bot.send_message(message.chat.id, paragraph)
             user_sent_messages[message.chat.id].append(msg.message_id)
 
-        # Отправка ссылки на статью
         if animal_info['article_url']:
             msg = bot.send_message(message.chat.id, f"Читать далее: {animal_info['article_url']}")
             user_sent_messages[message.chat.id].append(msg.message_id)
 
-    # Отправка кнопки "Назад"
     msg = bot.send_message(message.chat.id, "Что-то еще?", reply_markup=back_markup)
     user_sent_messages[message.chat.id].append(msg.message_id)
 
@@ -254,7 +249,6 @@ def search_animal_by_breed(message, breed_name):
         for paragraph in paragraphs:
             bot.send_message(message.chat.id, paragraph)
 
-    # Отправка ссылки на статью
     if animal_info['article_url']:
         bot.send_message(message.chat.id, f"Читать далее: {animal_info['article_url']}")
 
@@ -311,7 +305,6 @@ def show_dog_breed_info(message, breed_name):
     animal_info = get_animal_paragraph_and_image(breed_name)
     paragraphs = [clean_text(paragraph) for paragraph in animal_info['info']]
 
-    # Удаляем старые сообщения
     for msg_id in user_sent_messages[message.chat.id]:
         try:
             bot.delete_message(message.chat.id, msg_id)
@@ -325,7 +318,6 @@ def show_dog_breed_info(message, breed_name):
             msg = bot.send_message(message.chat.id, paragraph)
             user_sent_messages[message.chat.id].append(msg.message_id)
 
-    # Кнопка "Назад"
     back_to_breeds_markup = types.InlineKeyboardMarkup().add(
         types.InlineKeyboardButton('🔙Назад🔙', callback_data='back'))
     msg = bot.send_message(message.chat.id, "Что-то еще?", reply_markup=back_to_breeds_markup)
@@ -349,25 +341,21 @@ def show_cat_breed_info(message, breed_name):
             msg = bot.send_message(message.chat.id, paragraph)
             user_sent_messages[message.chat.id].append(msg.message_id)
 
-    # Кнопка "Назад"
     back_to_breeds_markup = types.InlineKeyboardMarkup().add(
         types.InlineKeyboardButton('🔙Назад🔙', callback_data='back'))
     msg = bot.send_message(message.chat.id, "Что-то еще?", reply_markup=back_to_breeds_markup)
     user_sent_messages[message.chat.id].append(msg.message_id)
 
 
-# Обработчики команд и кнопок
 @bot.callback_query_handler(func=lambda call: call.data == 'back')
 def handle_back(call):
     chat_id = call.message.chat.id
-    # Удаляем сообщение с информацией о породе или животном
     if call.message.reply_to_message:
         try:
             bot.delete_message(chat_id, call.message.reply_to_message.message_id)
         except telebot.apihelper.ApiTelegramException:
             pass
 
-    # Снова показываем основные кнопки
     show_main_buttons(chat_id)
 
 # Запуск бота
