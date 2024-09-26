@@ -358,6 +358,5 @@ def handle_back(call):
 
     show_main_buttons(chat_id)
 
-# Запуск бота
 if __name__ == '__main__':
     bot.polling(none_stop=True)
